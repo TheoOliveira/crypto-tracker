@@ -12,18 +12,16 @@ function App() {
   useEffect(() => {
     const fetchCryptoPrices = async () => {
       const responses = await Promise.all([
-        fetch("/prices/bitcoin"),
-        fetch("/prices/ethereum"),
-        fetch("/prices/dogecoin"),
+        fetch("price/bitcoin").then((response) => response.json()),
+        fetch("price/ethereum").then((response) => response.json()),
+        fetch("price/dogecoin").then((response) => response.json()),
       ]);
-      //  const data = await Promise.all(
-      //    responses.map((response) => response.json())
-      //  );
-      console.log(responses[0].json());
+      const data = await Promise.all(responses);
+
       setCryptoPrices({
-        bitcoin: responses[0].body,
-        ethereum: responses[1],
-        dogecoin: responses[2],
+        bitcoin: data[0].body,
+        ethereum: data[1].body,
+        dogecoin: data[2].body,
       });
     };
 
@@ -40,7 +38,6 @@ function App() {
       <div style={{ display: "flex", gap: "1rem" }}>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <span>BTC</span>
-
           <span>Last price: {cryptoPrices.bitcoin?.latest}</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
